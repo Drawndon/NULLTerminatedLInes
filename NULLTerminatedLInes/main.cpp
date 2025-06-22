@@ -2,42 +2,63 @@
 #include <Windows.h>
 using namespace std;
 
+void GetLine(char* s, int size);
+
 int StringLength(char *s);	//возвращает длину строки
 void ToUpper(char *s);		//переводит строку в верхний регистр
 void ToLower(char *s);		//переводит строку в нижний регистр
 
-void shrink(char *s);		//Удаляет лишние пробелы из предложения
+void shrink(char *s);	//Выводит строку без лишних пробелов
 						//Хорошо      живет     на     свете      Винни      Пух
 						//Хорошо живет на свете Винни Пух
 
 bool is_palindrome(char *s);	//Проверяет, является ли строка палиндромом
 
 bool is_int_number(char *s);	//Проверяет, является ли строка целым десятичным числом
-void to_int_number(char *s);//Если строка является целым десятичным числом, возвращает ее числовое значение
+int to_int_number(char *s);//Если строка является целым десятичным числом, возвращает ее числовое значение
 bool is_bin_number(char *s);	//Проверяет, является ли строка двоичным числом
-void bin_to_dec(char *s);	//Если строка является двоичным числом, возвращает ее десятичное значение
+int bin_to_dec(char *s);	//Если строка является двоичным числом, возвращает ее десятичное значение
 bool is_hex_number(char *s);	//Проверяет, является ли строка шестнадцатеричным числом
-void hex_to_dec(char *s);	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
-
+int hex_to_dec(char *s);	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
+#define SIZE 256
 
 void main()
 {
 	setlocale(LC_ALL, "");
 	//char str[] = { 'H', 'e', 'l', 'l', 'o', 0 }; Для извращенцев
 	//char str[] = "Hello"; // Так нормально
-	const int SIZE = 20;
+
 	char str[SIZE] = {};
-	cout << "Введите строку: ";
+/*	cout << "Введите строку: ";
 	//cin >> str;
-	SetConsoleCP(1251);
-	cin.getline(str, SIZE);
-	SetConsoleCP(866);
+	GetLine(str, SIZE);
 	cout << endl << str << endl;
+
 	cout << "Длина строки: " << StringLength(str) << endl;
+	
 	ToUpper(str);
 	cout << "Строка в верхнем регистре: " << str << endl;
+
 	ToLower(str);
 	cout << "Строка в нижнем регистре: " << str << endl;
+
+	cout << "Введите строку: ";
+	GetLine(str, SIZE);
+
+	cout << endl << "Удалили лишние пробелы:" << endl;
+	shrink(str);
+*/
+	cout << endl << "Введите строку: ";
+	GetLine(str, SIZE);
+
+	cout << str << (is_palindrome(str) ? " Палиндром" : " Не палиндром") << endl;
+}
+
+void GetLine(char* s, int size)
+{
+	SetConsoleCP(1251);
+	cin.getline(s, size);
+	SetConsoleCP(866);
 }
 
 int StringLength(char* s)
@@ -69,5 +90,106 @@ void ToLower(char* s)
 		if (*(s + i) == 'Ё') *(s + i) = 'ё';
 		i++;
 	}
+}
+
+void shrink(char* s)	//Выводит строку без лишних пробелов
+{
+	while (*s != '\0')
+	{
+
+		if (*s != ' ')
+		{
+			cout << *s;
+		}
+		else if (*s == ' ')
+		{
+			while (*s == ' ')
+			{
+				s++;
+			}
+			cout << " ";
+			s--;
+		}
+		s++;
+	}
+
+}
+
+bool is_palindrome(char* s)	//Проверяет, является ли строка палиндромом
+{
+	bool flag = true;
+	
+	int len_s = StringLength(s);
+		
+	for (int i = 0; i < len_s / 2 + 1; i++)
+	{
+		if (*(s + i) != *(s + len_s - 1 - i))
+		{
+			flag = false;
+			break;
+		}
+	}
+	return flag;
+}
+
+bool is_int_number(char* s)	//Проверяет, является ли строка целым десятичным числом
+{
+	bool flag = true;
+	int i = 0;
+	while (*(s + i) != '\0')
+	{
+		if (*(s + i) < '0' || *(s + i) > '9')
+		{
+			flag = false;
+			break;
+		}
+		i++;
+	}
+	return flag;
+}
+int to_int_number(char* s)	//Если строка является целым десятичным числом, возвращает ее числовое значение
+{
+	int number = 0;
+	return number;
+}
+bool is_bin_number(char* s)	//Проверяет, является ли строка двоичным числом
+{
+	bool flag = true;
+	int i = 0;
+	while (*(s + i) != '\0')
+	{
+		if (*(s + i) != '0' || *(s + i) != '1')
+		{
+			flag = false;
+			break;
+		}
+		i++;
+	}
+	return flag;
+}
+int bin_to_dec(char* s)	//Если строка является двоичным числом, возвращает ее десятичное значение
+{
+	int number = 0;
+	return number;
+}
+bool is_hex_number(char* s)	//Проверяет, является ли строка шестнадцатеричным числом
+{
+	bool flag = true;
+	int i = 0;
+	while (*(s + i) != '\0')
+	{
+		if (!(*(s + i) >= '0' && *(s + i) <= '9' || *(s + i) >= 'A' && *(s + i) <= 'F' || *(s + i) >= 'a' && *(s + i) <= 'f'))
+		{
+			flag = false;
+			break;
+		}
+		i++;
+	}
+	return flag;
+}
+int hex_to_dec(char* s)	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
+{
+	int number = 0;
+	return number;
 }
 
