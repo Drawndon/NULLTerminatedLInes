@@ -34,6 +34,8 @@ void main()
 	SetConsoleCP(866);
 	cout << endl << str << endl;
 	cout << "Длина строки: " << StringLength(str) << endl;
+	ToUpper(str);
+	cout << "Строка в верхнем регистре: " << str;
 }
 
 int StringLength(char* s)
@@ -48,6 +50,8 @@ void ToUpper(char* s)
 	int i = 0;
 	while (*(s + i) != '\0')
 	{
+		if (*(s + i) <= 'z' && *(s + i) >= 'a') *(s + i) = *(s + i) - 32;
+		if (*(s + i) <= 'я' && *(s + i) >= 'а') *(s + i) = *(s + i) - 32;
 		i++;
 	}
 }
