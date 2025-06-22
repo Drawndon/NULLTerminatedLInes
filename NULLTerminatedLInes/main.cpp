@@ -35,7 +35,9 @@ void main()
 	cout << endl << str << endl;
 	cout << "Длина строки: " << StringLength(str) << endl;
 	ToUpper(str);
-	cout << "Строка в верхнем регистре: " << str;
+	cout << "Строка в верхнем регистре: " << str << endl;
+	ToLower(str);
+	cout << "Строка в нижнем регистре: " << str << endl;
 }
 
 int StringLength(char* s)
@@ -52,6 +54,20 @@ void ToUpper(char* s)
 	{
 		if (*(s + i) <= 'z' && *(s + i) >= 'a') *(s + i) = *(s + i) - 32;
 		if (*(s + i) <= 'я' && *(s + i) >= 'а') *(s + i) = *(s + i) - 32;
+		if (*(s + i) == 'ё') *(s + i) = 'Ё';
 		i++;
 	}
 }
+
+void ToLower(char* s)
+{
+	int i = 0;
+	while (*(s + i) != '\0')
+	{
+		if (*(s + i) <= 'Z' && *(s + i) >= 'A') *(s + i) = *(s + i) + 32;
+		if (*(s + i) <= 'Я' && *(s + i) >= 'А') *(s + i) = *(s + i) + 32;
+		if (*(s + i) == 'Ё') *(s + i) = 'ё';
+		i++;
+	}
+}
+
