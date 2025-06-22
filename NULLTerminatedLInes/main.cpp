@@ -1,15 +1,15 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <Windows.h>
 using namespace std;
 
 void main()
 {
 	setlocale(LC_ALL, "");
-	//char str[] = { 'H', 'e', 'l', 'l', 'o', 0 }; Для извращенцев
-	//char str[] = "Hello"; // Так нормально
+	//char str[] = { 'H', 'e', 'l', 'l', 'o', 0 }; Р”Р»СЏ РёР·РІСЂР°С‰РµРЅС†РµРІ
+	//char str[] = "Hello"; // РўР°Рє РЅРѕСЂРјР°Р»СЊРЅРѕ
 	const int SIZE = 20;
 	char str[SIZE] = {};
-	cout << "Введите строку: ";
+	cout << "Р’РІРµРґРёС‚Рµ СЃС‚СЂРѕРєСѓ: ";
 	//cin >> str;
 	SetConsoleCP(1251);
 	cin.getline(str, SIZE);
