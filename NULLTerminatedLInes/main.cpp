@@ -3,6 +3,7 @@
 using namespace std;
 
 void GetLine(char* s, int size);
+int Power(int a, int b);
 
 int StringLength(char *s);	//возвращает длину строки
 void ToUpper(char *s);		//переводит строку в верхний регистр
@@ -59,6 +60,15 @@ void GetLine(char* s, int size)
 	SetConsoleCP(1251);
 	cin.getline(s, size);
 	SetConsoleCP(866);
+}
+
+int Power(int a, int b)
+{
+	int power;
+	if (b == 0) power = 1;
+	else power = a * Power(a, b - 1);
+	return power;
+
 }
 
 int StringLength(char* s)
@@ -170,6 +180,13 @@ bool is_bin_number(char* s)	//Проверяет, является ли стро
 int bin_to_dec(char* s)	//Если строка является двоичным числом, возвращает ее десятичное значение
 {
 	int number = 0;
+	if (is_bin_number(s))
+	{
+		for (int i = 0; i < StringLength(s) - 1; i++)
+		{
+
+		}
+	}
 	return number;
 }
 bool is_hex_number(char* s)	//Проверяет, является ли строка шестнадцатеричным числом
