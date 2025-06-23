@@ -30,7 +30,7 @@ void main()
 	//char str[] = "Hello"; // Так нормально
 
 	char str[SIZE] = {};
-/*	cout << "Введите строку: ";
+	cout << "Введите строку: ";
 	//cin >> str;
 	GetLine(str, SIZE);
 	cout << endl << str << endl;
@@ -43,16 +43,29 @@ void main()
 	ToLower(str);
 	cout << "Строка в нижнем регистре: " << str << endl;
 
-	cout << "Введите строку: ";
+	cout << "Введите строку с лишними пробелами, мы их удалим: ";
 	GetLine(str, SIZE);
 
 	cout << endl << "Удалили лишние пробелы:" << endl;
 	shrink(str);
-*/
-	cout << endl << "Введите строку: ";
+
+	cout << endl << "Введите строку, проверка на палиндром: ";
 	GetLine(str, SIZE);
 
 	cout << str << (is_palindrome(str) ? " Палиндром" : " Не палиндром") << endl;
+
+	cout << endl << "Введите строку, для перевода в десятичное число если это возможно: ";
+	GetLine(str, SIZE);
+
+	cout << str << ": " << to_int_number(str) << endl;
+
+	cout << endl << "Введите строку для перевода из двоичного формата в десятичный: ";
+	GetLine(str, SIZE);
+
+	cout << str << ": " << (is_bin_number(str) ? bin_to_dec(str) : -1) << endl;
+
+
+
 }
 
 void GetLine(char* s, int size)
@@ -160,31 +173,47 @@ bool is_int_number(char* s)	//Проверяет, является ли стро
 int to_int_number(char* s)	//Если строка является целым десятичным числом, возвращает ее числовое значение
 {
 	int number = 0;
+	int len_s = StringLength(s);
+	int i = 0;
+	if (is_int_number(s))
+	{
+		while (*s != '\0')
+		{
+			number += (*s - '0') * Power(10, len_s - 1 - i);
+			i++;
+			s++;
+		}
+	}
 	return number;
 }
 bool is_bin_number(char* s)	//Проверяет, является ли строка двоичным числом
 {
 	bool flag = true;
-	int i = 0;
-	while (*(s + i) != '\0')
+	
+	while (*s != '\0')
 	{
-		if (*(s + i) != '0' || *(s + i) != '1')
+		if (*s != '0' && *s != '1')
 		{
 			flag = false;
 			break;
 		}
-		i++;
+		s++;
 	}
 	return flag;
 }
 int bin_to_dec(char* s)	//Если строка является двоичным числом, возвращает ее десятичное значение
 {
 	int number = 0;
+	int len_s = StringLength(s);
+	int i = 0;
 	if (is_bin_number(s))
 	{
-		for (int i = 0; i < StringLength(s) - 1; i++)
+		while (*s != '\0')
 		{
-
+			number += (*s - '0') * Power(2, len_s - 1 - i);
+			
+			i++;
+			s++;
 		}
 	}
 	return number;
