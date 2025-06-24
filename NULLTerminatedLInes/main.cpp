@@ -5,7 +5,7 @@ using namespace std;
 void GetLine(char* s, int size);
 int Power(int a, int b);
 
-int StringLength(char *s);	//возвращает длину строки
+int StringLength(const char *s);	//возвращает длину строки
 void ToUpper(char *s);		//переводит строку в верхний регистр
 void ToLower(char *s);		//переводит строку в нижний регистр
 
@@ -19,8 +19,12 @@ bool is_int_number(char *s);	//Проверяет, является ли стр�
 int to_int_number(char *s);//Если строка является целым десятичным числом, возвращает ее числовое значение
 bool is_bin_number(char *s);	//Проверяет, является ли строка двоичным числом
 int bin_to_dec(char *s);	//Если строка является двоичным числом, возвращает ее десятичное значение
-bool is_hex_number(char *s);	//Проверяет, является ли строка шестнадцатеричным числом
-int hex_to_dec(char *s);	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
+bool is_hex_number(const char *s);	//Проверяет, является ли строка шестнадцатеричным числом
+int hex_to_dec(const char *s);	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
+
+bool isIPaddress(const char *s);	//Проверяет, является ли строка IP-адресом
+bool isMACaddress(const char *s);	//Проверяет, является ли строка MAC-адресом
+
 #define SIZE 256
 
 void main()
@@ -30,7 +34,7 @@ void main()
 	//char str[] = "Hello"; // Так нормально
 
 	char str[SIZE] = {};
-	cout << "Введите строку: ";
+/*	cout << "Введите строку: ";
 	//cin >> str;
 	GetLine(str, SIZE);
 	cout << endl << str << endl;
@@ -63,6 +67,15 @@ void main()
 	GetLine(str, SIZE);
 
 	cout << str << ": " << (is_bin_number(str) ? bin_to_dec(str) : -1) << endl;
+	*/
+	cout << endl << "Введите строку в шестнадцатиричном формате: "; GetLine(str, SIZE);
+	cout << endl << str << ": " << hex_to_dec(str) << endl;
+	cout << endl << "Введите IP адрес: "; GetLine(str, SIZE);
+	
+	cout << endl << str << (isIPaddress(str) ? " корректный" : " не корректный") << " IP адрес" << endl;
+
+	cout << endl << "Введите MAC адрес: "; GetLine(str, SIZE);
+	cout << endl << str << (isMACaddress(str) ? " корректный" : " не корректный") << " MAC адрес" << endl;
 
 
 
@@ -84,7 +97,7 @@ int Power(int a, int b)
 
 }
 
-int StringLength(char* s)
+int StringLength(const char* s)
 {
 	int i = 0;
 	while (*(s + i) != '\0') i++;
@@ -218,7 +231,7 @@ int bin_to_dec(char* s)	//Если строка является двоичны�
 	}
 	return number;
 }
-bool is_hex_number(char* s)	//Проверяет, является ли строка шестнадцатеричным числом
+bool is_hex_number(const char* s)	//Проверяет, является ли строка шестнадцатеричным числом
 {
 	bool flag = true;
 	int i = 0;
@@ -233,9 +246,84 @@ bool is_hex_number(char* s)	//Проверяет, является ли стро
 	}
 	return flag;
 }
-int hex_to_dec(char* s)	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
+int hex_to_dec(const char* s)	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
 {
+	if (!is_hex_number(s)) return 0;
 	int number = 0;
+
+	while (*s)
+	{
+		int el;
+		if (*s >= '0' && *s <= '9') el = *s - '0';
+		else if	(*s >= 'a' && *s <= 'f') el = 10 + (*s - 'a');
+		else if	(*s >= 'A' && *s <= 'F') el = 10 + (*s - 'A');
+
+		number = number * 16 + el;
+		s++;
+	}
 	return number;
+}
+
+bool isIPaddress(const char* s)	//Проверяет, является ли строка IP-адресом
+{
+	int len_s = StringLength(s);
+
+	if (len_s < 7 || len_s > 15) return false;
+	
+	int count_sep = 0;
+	int num_el = 0;
+	int triad = 0;
+	while (*s)
+	{
+		if (isdigit(*s))
+		{
+			triad = triad * 10 + (*s - '0');
+			num_el++;
+			if (triad > 255 || num_el > 3) return false;
+		}
+		else if (*s == '.')
+		{
+			if (num_el == 0) return false;
+
+			triad = 0;
+			num_el = 0;
+			count_sep++;
+
+			if (count_sep > 3) return false;
+		}
+		else return false;
+		s++;
+	}
+
+	if (count_sep != 3 || num_el == 0) return false;
+
+	return true;
+}
+bool isMACaddress(const char* s)	//Проверяет, является ли строка MAC-адресом
+{
+	int len_s = StringLength(s);
+	int octet = 0;
+	if (len_s != 17) return false;
+	for (int i = 0; i < len_s; i++)
+	{
+		if (i % 3 == 2)
+		{
+			if (s[i] != ':' && s[i] != '-') return false;
+			octet = 0;
+		}
+		else
+		{
+			int el;
+			if (s[i] >= '0' && s[i] <= '9') el = s[i] - '0';
+			else if (s[i] >= 'a' && s[i] <= 'f') el = 10 + (s[i] - 'a');
+			else if (s[i] >= 'A' && s[i] <= 'F') el = 10 + (s[i] - 'A');
+			else return false;
+
+			octet = octet * 16 + el;
+
+			if (octet > 255) return false;
+		}
+	}
+	return true;
 }
 
