@@ -207,7 +207,7 @@ unsigned long long hex2dec(const char str[])
 	}
 	return decimal;
 }
-
+/*
 bool isIPaddress(const char str[])
 {
 	int n = strlen(str);
@@ -231,4 +231,26 @@ bool isIPaddress(const char str[])
 		cout << bytes[i] << "\t";
 	}
 	cout << endl;
+}*/
+
+bool isIPaddress(const char str[])
+{
+	int n = strlen(str);
+	if (n < 7 || n > 15) return false;
+	char byte[4] = {};
+
+	for (int i = 0, j = 0, points = 0; str[i]; i++)
+	{
+		if (str[i] == '.')
+		{
+			j = 0;
+			points++;
+			if (points > 3) return false;
+			if (to_int_number(byte) > 255) return false;
+			continue;
+		}
+		byte[j++] = str[i];
+		if (j > 3) return false;
+	}
+	return true;
 }
