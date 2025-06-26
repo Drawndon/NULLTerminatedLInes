@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <Windows.h>
+#include <regex>
 using namespace std;
 
 void GetLine(char* s, int size);
@@ -23,7 +24,7 @@ bool is_hex_number(const char *s);	//Проверяет, является ли �
 int hex_to_dec(const char *s);	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
 
 bool isIPaddress(const char *s);	//Проверяет, является ли строка IP-адресом
-bool isMACaddress(const char *s);	//Проверяет, является ли строка MAC-адресом
+bool isMACaddress(string s);	//Проверяет, является ли строка MAC-адресом
 
 #define SIZE 256
 
@@ -47,9 +48,10 @@ void main()
 	ToLower(str);
 	cout << "Строка в нижнем регистре: " << str << endl; */
 
-	cout << "Введите строку с лишними пробелами, мы их удалим: "; GetLine(str, SIZE);
+	//cout << "Введите строку с лишними пробелами, мы их удалим: ";
+	//GetLine(str, SIZE);
 
-	cout << endl << "Удалили лишние пробелы:" << shrink(str) << endl;
+	//cout << endl << "Удалили лишние пробелы:" << shrink(str) << endl;
 
 
 /*	cout << endl << "Введите строку, проверка на палиндром: ";
@@ -67,16 +69,16 @@ void main()
 
 	cout << str << ": " << (is_bin_number(str) ? bin_to_dec(str) : -1) << endl;
 	*/
-	cout << endl << "Введите строку в шестнадцатиричном формате: "; GetLine(str, SIZE);
+/*	cout << endl << "Введите строку в шестнадцатиричном формате: "; GetLine(str, SIZE);
 	cout << endl << str << ": " << hex_to_dec(str) << endl;
 	cout << endl << "Введите IP адрес: "; GetLine(str, SIZE);
 	
-	cout << endl << str << (isIPaddress(str) ? " корректный" : " не корректный") << " IP адрес" << endl;
+	cout << endl << str << (isIPaddress(str) ? " корректный" : " не корректный") << " IP адрес" << endl;*/
 
 	cout << endl << "Введите MAC адрес: "; GetLine(str, SIZE);
 	cout << endl << str << (isMACaddress(str) ? " корректный" : " не корректный") << " MAC адрес" << endl;
 
-
+	main();
 
 }
 
@@ -288,7 +290,7 @@ bool isIPaddress(const char* s)	//Проверяет, является ли ст
 
 	return true;
 }
-bool isMACaddress(const char* s)	//Проверяет, является ли строка MAC-адресом
+/*bool isMACaddress(const char* s)	//Проверяет, является ли строка MAC-адресом
 {
 	int len_s = StringLength(s);
 	int octet = 0;
@@ -314,5 +316,10 @@ bool isMACaddress(const char* s)	//Проверяет, является ли с�
 		}
 	}
 	return true;
-}
+}*/
 
+bool isMACaddress(string s)
+{
+	static const regex r("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$");
+	return regex_match(s.data(), r);
+}
