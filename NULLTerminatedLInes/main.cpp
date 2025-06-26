@@ -24,7 +24,7 @@ bool is_hex_number(const char *s);	//Проверяет, является ли �
 int hex_to_dec(const char *s);	//Если строка является шестнадцатеричным числом, возвращает ее десятичное значение
 
 bool isIPaddress(const char *s);	//Проверяет, является ли строка IP-адресом
-bool isMACaddress(string s);	//Проверяет, является ли строка MAC-адресом
+bool isMACaddress(char str[]);	//Проверяет, является ли строка MAC-адресом
 
 #define SIZE 256
 
@@ -318,8 +318,40 @@ bool isIPaddress(const char* s)	//Проверяет, является ли ст
 	return true;
 }*/
 
-bool isMACaddress(string s)
+/*bool isMACaddress(string s)
 {
 	static const regex r("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$");
 	return regex_match(s.data(), r);
+}*/
+
+bool isMACaddress(char str[])
+{
+	char* ps;
+	char buffer[SIZE] = {};
+	char* p_buffer = buffer;
+	int count_colon = 0, count_dash = 0;
+	for (int i = 0; str[i]; i++)
+	{
+		if (i % 3 == 2)
+		{
+			buffer[i] = str[i];
+			if (str[i] != ':' && str[i] != '-')	return false;
+			else if (str[i] == ':') count_colon++;
+			else count_dash++;
+		}		
+		else buffer[i] = str[i];
+	}
+	
+	if (count_colon != 5 && count_dash != 5) return false;
+	int count_octet = 0;
+	char* context = NULL;
+	ps = strtok_s(p_buffer, ":-", &context);
+	
+	while (ps)
+	{
+		(is_hex_number(ps) && hex_to_dec(ps) <= 255 && strlen(ps) == 2) ? count_octet++ : count_octet--;
+		ps = strtok_s(NULL, ":-", &context);
+	}
+
+	return count_octet == 6;
 }
